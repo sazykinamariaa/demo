@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Запуск «Клинического компаса» локально:  ./run.sh          (демо-данные включены)
-#                                           KK_DEMO_SEED=0 ./run.sh   (чистая база)
+# Запуск «Клинического компаса» локально:  ./run.sh                    (стартовые пользователи и пациенты S1–S8)
+#   KK_SEED=0 ./run.sh   — без стартовых данных;  KK_INIT_PASSWORD=...  — свой начальный пароль;  KK_HOST=0.0.0.0 — доступ из локальной сети
 set -e
 cd "$(dirname "$0")"
 
@@ -33,9 +33,9 @@ if [ ! -x .venv/bin/python ] || ! .venv/bin/python -c 'import sys; sys.exit(0 if
   fi
 fi
 
-export KK_DEMO_SEED="${KK_DEMO_SEED:-1}"
+export KK_SEED="${KK_SEED:-1}"
 export KK_DATA_DIR="${KK_DATA_DIR:-$PWD/data}"
 cd backend
 echo "Открывайте: http://127.0.0.1:8000/  (приложение);  /docs — документация API"
-echo "Демо-вход: doctor1 / demo12345,  admin / demo12345,  psychiatrist / demo12345,  duty / demo12345,  patient_s5 / demo12345"
+echo "Вход: doctor1, doctor2, duty, clinic_admin, staff, psychiatrist, admin, patient_s1…patient_s8; пароль ${KK_INIT_PASSWORD:-Kompas2026x}"
 exec ../.venv/bin/python -m uvicorn app.main:app --host "${KK_HOST:-127.0.0.1}" --port 8000
